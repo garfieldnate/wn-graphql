@@ -17,6 +17,6 @@ var auto = new SequelizeAuto(db_path, 'user', 'pass', {
 
 auto.run(function (err) {
   if (err) throw err;
-  // console.log(auto.tables); // table list
-  // console.log(auto.foreignKeys); // foreign key list
+  console.log(auto.tables); // table list
+  console.log(auto.foreignKeys); // foreign key list
 });

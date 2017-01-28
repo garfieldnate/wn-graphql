@@ -1,6 +1,8 @@
 #GraphQL WordNet
 
-This is an experimental project to help me learn GraphQL but implementing WordNet querying.
+This is an experimental project to help me learn about GraphQL by implementing WordNet querying.
+
+I'm following the tutorial located [here](https://www.youtube.com/watch?v=DNPVqK_woRQ).
 
 ##Building
 

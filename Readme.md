@@ -4,6 +4,8 @@ This is an experimental project to help me learn GraphQL but implementing WordNe
 
 ##Building
 
+First download the WN sqlite db from [here](https://downloads.sourceforge.net/project/wnsql/wnsql3/mysql/3.1/mysql-3.0.0-31-wn-31.zip?r=https%3A%2F%2Fsourceforge.net%2Fprojects%2Fwnsql%2Ffiles%2Fwnsql3%2Fsqlite%2F3.1%2F&ts=1485637843&use_mirror=freefr) and place under `db/`. Then run the following:
+
     npm i
     npm run sql-gen
 

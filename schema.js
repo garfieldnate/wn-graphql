@@ -17,6 +17,18 @@ const renameId = (tableName) => {
     }
 }
 
+const getOneToMany = (cell, idType, otherTable) => {
+    var otherId = otherTable + 'id';
+    var thisId = idType + 'id';
+    return db.sequelize.models[otherTable].findAll({where: {[thisId]: cell[thisId]}});
+}
+
+const getOneToOne = (cell, idType, otherTable) => {
+    var otherId = otherTable + 'id';
+    var thisId = idType + 'id';
+    return db.sequelize.models[otherTable].findOne({where: {[thisId]: cell[thisId]}});
+}
+
 const POSType = new GraphQLEnumType({
     name: 'POS',
     values: {
@@ -24,6 +36,39 @@ const POSType = new GraphQLEnumType({
         VERB: { value: 'v', description: "verb" },
         ADJECTIVE: { value: 'a', description: "adjective" },
         ADVERB: { value: 'r', description: "adverb" }
+    }
+});
+
+const LexDomain = new GraphQLObjectType({
+    name: 'LexDomain',
+    description: 'Subject/domain that a lexeme may belong to',
+    fields: () => {
+        return {
+            id: {
+                type: GraphQLInt,
+                resolve(lexDomain) {
+                    return lexDomain.lexdomainid;
+                }
+            },
+            name: {
+                type: GraphQLString,
+                resolve(lexDomain) {
+                    return lexDomain.lexdomainname;
+                }
+            },
+            lexdomain: {
+                type: GraphQLString,
+                resolve(lexDomain) {
+                    return lexDomain.lexdomain;
+                }
+            },
+            pos: {
+                type: POSType,
+                resolve(lexDomain) {
+                    return lexDomain.pos;
+                }
+            }
+        }
     }
 });
 
@@ -53,10 +98,15 @@ const SynSet = new GraphQLObjectType({
             senses: {
                 type: new GraphQLList(Sense),
                 resolve(synset) {
-                    return db.sequelize.models.senses.findAll({where: {synsetid: synset.synsetid}});
+                    return getOneToMany(synset, 'synset', 'senses');
+                }
+            },
+            lexdomain: {
+                type: LexDomain,
+                resolve(synset) {
+                    return getOneToOne(synset, 'lexdomain', 'lexdomains');
                 }
             }
-            // lexdomainid: ...
         }
     }
 });
@@ -81,7 +131,7 @@ const Word = new GraphQLObjectType({
             senses: {
                 type: new GraphQLList(Sense),
                 resolve(word) {
-                    return db.sequelize.models.senses.findAll({where: {wordid: word.wordid}});
+                    return getOneToMany(word, 'word', 'senses');
                 }
             }
         }
@@ -102,7 +152,7 @@ const Sense = new GraphQLObjectType({
             word: {
                 type: Word,
                 resolve(sense) {
-                    return db.sequelize.models.words.findOne({where: {wordid: sense.wordid}});
+                    return getOneToOne(sense, 'word', 'words');
                 }
             },
             // casedword: {
@@ -114,7 +164,7 @@ const Sense = new GraphQLObjectType({
             synset: {
                 type: SynSet,
                 resolve(sense) {
-                    return db.sequelize.models.synsets.findOne({where: {synsetid: sense.synsetid}});
+                    return getOneToOne(sense, 'synset', 'synsets');
                 }
             },
             sensenum: {

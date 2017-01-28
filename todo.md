@@ -1,5 +1,9 @@
 #Todo
 
+Word-Sense-Synset is done. Verb frames and syntactic info are completely unimplemented.
+
+Longer-term ideas:
+
 * Use Jake
     - Add task to download SQL WordNet version from https://sourceforge.net/projects/wnsql/
 * Configure DB models location in one place

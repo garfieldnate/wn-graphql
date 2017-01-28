@@ -1,0 +1,4 @@
+db/models
+node_modules
+yarn.lock
+*.db

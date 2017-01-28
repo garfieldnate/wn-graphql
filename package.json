@@ -1,0 +1,18 @@
+{
+  "name": "graphQL-experiment",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "babel-preset-node5": "^12.0.0",
+    "graphql": "^0.8.2",
+    "sequelize": "^3.29.0",
+    "sqlite3": "^3.1.8"
+  },
+  "devDependencies": {
+    "jake": "latest"
+  },
+  "scripts": {
+    "gen-sql": "babel-node scripts/gen_sequelize.js"
+  }
+}

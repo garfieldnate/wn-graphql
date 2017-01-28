@@ -7,14 +7,15 @@ import {
     GraphQLSchema,
 } from 'graphql';
 import db from './db';
+import util from 'util';
 
-var POSType = new GraphQLEnumType({
+const POSType = new GraphQLEnumType({
     name: 'POS',
     values: {
-        NOUN: { value: 0 },
-        VERB: { value: 1 },
-        ADJECTIVE: { value: 2 },
-        ADVERB: { value: 3 }
+        NOUN: { value: 'n', description: "noun" },
+        VERB: { value: 'v', description: "verb" },
+        ADJECTIVE: { value: 'a', description: "adjective" },
+        ADVERB: { value: 'r', description: "adverb" }
     }
 });
 
@@ -29,12 +30,12 @@ const SynSet = new GraphQLObjectType({
                     return synset.synsetid;
                 }
             },
-            // pos: {
-            //     type: POSType,
-            //     resolve(synset) {
-            //         return synset.pos;
-            //     }
-            // },
+            pos: {
+                type: POSType,
+                resolve(synset) {
+                    return synset.pos;
+                }
+            },
             definition: {
                 type: GraphQLString,
                 resolve(synset) {
@@ -42,6 +43,27 @@ const SynSet = new GraphQLObjectType({
                 }
             }
             // lexdomainid:
+        }
+    }
+});
+
+const Word = new GraphQLObjectType({
+    name: 'Word',
+    description: 'An orthographical representation',
+    fields: () => {
+        return {
+            id: {
+                type: GraphQLInt,
+                resolve(word) {
+                    return word.wordid;
+                }
+            },
+            lemma: {
+                type: GraphQLString,
+                resolve(word) {
+                    return word.lemma;
+                }
+            }
         }
     }
 });
@@ -56,12 +78,35 @@ const Query = new GraphQLObjectType({
                 args: {
                     id: {
                         type: GraphQLInt
+                    },
+                    pos: {
+                        type: POSType
                     }
                 },
                 resolve(root, args) {
-                    args.synsetid = args.id;
-                    delete args.id;
+                    if('id' in args){
+                        args.synsetid = args.id;
+                        delete args.id;
+                    }
                     return db.sequelize.models.synsets.findAll({where: args});
+                }
+            },
+            words: {
+                type: new GraphQLList(Word),
+                args: {
+                    id: {
+                        type: GraphQLInt
+                    },
+                    lemma: {
+                        type: GraphQLString
+                    }
+                },
+                resolve(root, args) {
+                    if('id' in args){
+                        args.wordid = args.id;
+                        delete args.id;
+                    }
+                    return db.sequelize.models.words.findAll({where: args});
                 }
             }
         }

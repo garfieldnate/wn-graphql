@@ -7,7 +7,15 @@ import {
     GraphQLSchema,
 } from 'graphql';
 import db from './db';
-import util from 'util';
+
+const renameId = (tableName) => {
+    return (args) => {
+        if('id' in args){
+            args[tableName+'id'] = args.id;
+            delete args.id;
+        }
+    }
+}
 
 const POSType = new GraphQLEnumType({
     name: 'POS',
@@ -148,10 +156,7 @@ const Query = new GraphQLObjectType({
                     }
                 },
                 resolve(root, args) {
-                    if('id' in args){
-                        args.synsetid = args.id;
-                        delete args.id;
-                    }
+                    renameId('synset')(args);
                     return db.sequelize.models.synsets.findAll({where: args});
                 }
             },
@@ -166,10 +171,7 @@ const Query = new GraphQLObjectType({
                     }
                 },
                 resolve(root, args) {
-                    if('id' in args){
-                        args.wordid = args.id;
-                        delete args.id;
-                    }
+                    renameId('word')(args);
                     return db.sequelize.models.words.findAll({where: args});
                 }
             },
@@ -181,10 +183,7 @@ const Query = new GraphQLObjectType({
                     }
                 },
                 resolve(root, args) {
-                    if('id' in args){
-                        args.senseid = args.id;
-                        delete args.id;
-                    }
+                    renameId('sense')(args);
                     return db.sequelize.models.senses.findAll({where: args});
                 }
             }

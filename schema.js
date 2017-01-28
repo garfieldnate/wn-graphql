@@ -59,6 +59,8 @@ const Query = new GraphQLObjectType({
                     }
                 },
                 resolve(root, args) {
+                    args.synsetid = args.id;
+                    delete args.id;
                     return db.sequelize.models.synsets.findAll({where: args});
                 }
             }

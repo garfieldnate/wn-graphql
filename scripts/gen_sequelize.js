@@ -8,7 +8,11 @@ var auto = new SequelizeAuto(db_path, 'user', 'pass', {
     host: 'localhost',
     dialect: 'sqlite',
     directory: 'db/models',
-    storage: db_path
+    storage: db_path,
+    additional: {
+        // db is pre-existing, so allowing timestamps would lead to SQL errors
+        timestamps: false
+    },
 });
 
 auto.run(function (err) {

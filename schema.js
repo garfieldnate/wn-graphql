@@ -3,16 +3,17 @@ import {
     GraphQLInt,
     GraphQLString,
     GraphQLEnumType,
-    GraphQLList
+    GraphQLList,
+    GraphQLSchema,
 } from 'graphql';
 import db from './db';
 
 var POSType = new GraphQLEnumType({
     name: 'POS',
     values: {
-        NOUN: { value: 0 }
-        VERB: { value: 1 }
-        ADJECTIVE: { value: 2 }
+        NOUN: { value: 0 },
+        VERB: { value: 1 },
+        ADJECTIVE: { value: 2 },
         ADVERB: { value: 3 }
     }
 });
@@ -52,6 +53,11 @@ const Query = new GraphQLObjectType({
         return {
             synsets: {
                 type: new GraphQLList(SynSet),
+                args: {
+                    id: {
+                        type: GraphQLInt
+                    }
+                },
                 resolve(root, args) {
                     return db.sequelize.models.synsets.findAll({where: args});
                 }
@@ -59,3 +65,9 @@ const Query = new GraphQLObjectType({
         }
     }
 });
+
+const Schema = new GraphQLSchema({
+    query: Query
+});
+
+export default Schema;

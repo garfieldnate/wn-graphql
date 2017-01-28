@@ -32,16 +32,6 @@ Object.keys(db).forEach(function(modelName) {
   }
 });
 
-sequelize
-  .authenticate()
-  .then(function(err) {
-    console.log('Connection has been established successfully.');
-console.log(sequelize.showAllSchemas());
-  })
-  .catch(function (err) {
-    console.log('Unable to connect to the database:', err);
-  });
-
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 export default db;

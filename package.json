@@ -5,12 +5,18 @@
   "license": "MIT",
   "dependencies": {
     "babel-preset-node5": "^12.0.0",
+    "express": "^4.14.0",
+    "express-graphql": "^0.6.2",
+    "graphiql": "^0.9.1",
     "graphql": "^0.8.2",
+    "react": "^15.4.2",
+    "react-dom": "^15.4.2",
     "sequelize": "^3.29.0",
     "sqlite3": "^3.1.8"
   },
   "devDependencies": {
-    "jake": "latest"
+    "jake": "latest",
+    "sequelize-auto": ">=0.4.18"
   },
   "scripts": {
     "gen-sql": "babel-node scripts/gen_sequelize.js"
